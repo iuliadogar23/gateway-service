@@ -1,6 +1,10 @@
 server:
     port: 9999
 
+management:
+    endpoint.gateway.enabled: true
+    endpoints.web.exposure.include: gateway
+
 spring:
     application:
         name: gateway-service
@@ -16,9 +20,29 @@ spring:
                 - id: doctor-service
                   uri: http://localhost:8888/
                   predicates:
-                      - Path=/consult/**
-
+                      - Path=/consult/**, /doctor/**
+                  filters:
+                      - name: AuthFilter
+                - id: authorization-service
+                  uri: http://localhost:1111/
+                  predicates:
+                      - Path=/cont/**
+                - id: pacient-service
+                  uri: http://localhost:7777/
+                  predicates:
+                      - Path=/fisa-medicala/**, /pacient/**
+                  filters:
+                      - name: AuthFilter
+                - id: resource-service
+                  uri: http://localhost:6666/
+                  predicates:
+                    - Path=/sala-operatie/**, /pat/**
+                  filters:
+                    - name: AuthFilter
 eureka:
     client:
         service-url:
             defaultZone: http://localhost:8761/eureka/
+    instance:
+        prefer-ip-address: true
+        hostname: localhost
