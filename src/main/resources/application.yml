@@ -39,6 +39,12 @@ spring:
                     - Path=/sala-operatie/**, /pat/**
                   filters:
                     - name: AuthFilter
+                - id: notification-service
+                  uri: http://localhost:2222/
+                  predicates:
+                    - Path=/notificare/**, /mesaj/**
+                  filters:
+                    - name: AuthFilter
 eureka:
     client:
         service-url:
